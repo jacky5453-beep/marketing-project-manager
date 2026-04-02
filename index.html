@@ -699,10 +699,16 @@ let currentUid = null;
 // ===== Auth Functions =====
 function googleSignIn() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider).catch(function(err) {
-    console.error('Sign-in error:', err);
-    alert('登入失敗：' + err.message);
-  });
+  // 手機用 redirect，桌機用 popup
+  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) {
+    auth.signInWithRedirect(provider);
+  } else {
+    auth.signInWithPopup(provider).catch(function(err) {
+      console.error('Sign-in error:', err);
+      alert('登入失敗：' + err.message);
+    });
+  }
 }
 
 function signOut() {
