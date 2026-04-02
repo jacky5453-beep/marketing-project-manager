@@ -700,14 +700,17 @@ let currentUid = null;
 // ===== Auth Functions =====
 function googleSignIn() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  // 手機用 redirect，桌機用 popup
-  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  // 優先使用 redirect（手機相容性最好），桌機 fallback 用 popup
+  var isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent);
   if (isMobile) {
     auth.signInWithRedirect(provider);
   } else {
-    auth.signInWithPopup(provider).catch(function(err) {
-      console.error('Sign-in error:', err);
-      alert('登入失敗：' + err.message);
+    auth.signInWithPopup(provider).then(function(result) {
+      // 登入成功，onAuthStateChanged 會處理
+    }).catch(function(err) {
+      console.error('Popup failed, trying redirect:', err);
+      // Popup 失敗就改用 redirect
+      auth.signInWithRedirect(provider);
     });
   }
 }
@@ -720,8 +723,12 @@ function signOut() {
 }
 
 // Handle redirect result (for mobile login)
-auth.getRedirectResult().catch(function(err) {
-  if (err.code !== 'auth/null') {
+auth.getRedirectResult().then(function(result) {
+  if (result && result.user) {
+    console.log('Redirect sign-in success:', result.user.displayName);
+  }
+}).catch(function(err) {
+  if (err.code && err.code !== 'auth/null') {
     console.error('Redirect sign-in error:', err);
     alert('登入失敗：' + err.message);
   }
