@@ -693,6 +693,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 const db = firebase.firestore();
 let currentUid = null;
 
@@ -717,6 +718,14 @@ function signOut() {
     console.error('Sign-out error:', err);
   });
 }
+
+// Handle redirect result (for mobile login)
+auth.getRedirectResult().catch(function(err) {
+  if (err.code !== 'auth/null') {
+    console.error('Redirect sign-in error:', err);
+    alert('登入失敗：' + err.message);
+  }
+});
 
 // Auth state listener
 auth.onAuthStateChanged(function(user) {
