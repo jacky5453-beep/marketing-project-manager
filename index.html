@@ -700,19 +700,18 @@ let currentUid = null;
 // ===== Auth Functions =====
 function googleSignIn() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  // 優先使用 redirect（手機相容性最好），桌機 fallback 用 popup
-  var isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent);
-  if (isMobile) {
-    auth.signInWithRedirect(provider);
-  } else {
-    auth.signInWithPopup(provider).then(function(result) {
-      // 登入成功，onAuthStateChanged 會處理
-    }).catch(function(err) {
-      console.error('Popup failed, trying redirect:', err);
-      // Popup 失敗就改用 redirect
+  provider.setCustomParameters({ prompt: 'select_account' });
+  // 統一使用 popup，失敗才 fallback redirect
+  auth.signInWithPopup(provider).then(function(result) {
+    // 登入成功，onAuthStateChanged 會處理
+  }).catch(function(err) {
+    console.error('Popup failed, trying redirect:', err);
+    if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
       auth.signInWithRedirect(provider);
-    });
-  }
+    } else {
+      alert('登入失敗：' + err.message);
+    }
+  });
 }
 
 function signOut() {
