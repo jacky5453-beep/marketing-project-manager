@@ -135,9 +135,9 @@ body{font-family:'DM Sans','Noto Sans TC',sans-serif;background:var(--bg);color:
 .main{margin-left:220px;flex:1;padding:32px 36px;max-width:1200px}
 
 /* Sidebar */
-.sidebar-logo{padding:14px 14px 12px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:2px}
-/* \u82f1\u6587 Logo \u5716\u6a94\u4e0a\u4e0b\u6709\u7a7a\u767d\uff0c\u5bb9\u5668\u52a0\u5927\u4e14\u662f\u65bd\u8ca0 margin \u6d88\u9664\u7a7a\u767d */
-.sidebar-logo img{width:calc(100% + 16px);max-width:210px;height:auto;object-fit:contain;display:block;margin:-12px -8px -8px}
+.sidebar-logo{padding:4px 14px 6px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:2px;overflow:hidden}
+/* 英文 Logo 圖檔上下有空白，容器加大且是施負 margin 消除空白 */
+.sidebar-logo img{width:calc(100% + 16px);max-width:210px;height:auto;object-fit:contain;display:block;margin:-24px -8px -20px}
 .logo-text{font-size:12px;font-weight:500;color:var(--text2);letter-spacing:.04em}
 .sidebar-nav{padding:12px 10px;flex:1;overflow-y:auto}
 .nav-section{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;padding:12px 10px 6px}
