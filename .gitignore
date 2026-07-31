@@ -1,0 +1,11 @@
+# 敏感檔案與暫存（資安基本盤）
+.env
+.env.*
+*service-account*.json
+*firebase-adminsdk*.json
+*.pem
+*.key
+.DS_Store
+node_modules/
+.firebase/
+.claude/
